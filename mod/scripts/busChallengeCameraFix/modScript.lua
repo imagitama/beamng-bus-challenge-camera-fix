@@ -1,2 +1,2 @@
-setExtensionUnloadMode("busChallengeCameraFix", "manual")
+setExtensionUnloadMode("buschallengecamerafix", "manual")
 loadManualUnloadExtensions()

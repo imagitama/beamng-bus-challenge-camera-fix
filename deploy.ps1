@@ -1,4 +1,4 @@
-$TARGET="$env:LOCALAPPDATA\BeamNG\BeamNG.drive\current\mods\unpacked\BusChallengeCameraFix"
+$TARGET="$env:LOCALAPPDATA\BeamNG\BeamNG.drive\current\mods\unpacked\buschallengecamerafix"
 
 echo "Copying to $TARGET"
 

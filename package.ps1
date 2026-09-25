@@ -1,14 +1,13 @@
 $version = "$(Get-Content -Path ./VERSION.txt -TotalCount 1)".Trim()
 
 $dirPath = "./dist"
-$zipPath = "$dirPath/BusChallengeCameraFix-$VERSION.zip"
+$zipPath = "$dirPath/buschallengecamerafix-$VERSION.zip"
 
 Write-Host "Packaging..."
 
 Remove-Item -Path $dirPath -Recurse -Force
 
 mkdir $dirPath
-
 
 Compress-Archive -Path ./mod -DestinationPath $zipPath -Update
 
