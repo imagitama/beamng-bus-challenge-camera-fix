@@ -1,0 +1,2 @@
+setExtensionUnloadMode("buschallengecamerafix", "manual")
+loadManualUnloadExtensions()
