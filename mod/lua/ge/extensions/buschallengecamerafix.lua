@@ -8,51 +8,6 @@ local justRevertedCamera = false
 local isGoingToSwitchCamera = false
 
 local patchedMgr, origActivity
- 
--- works for bus stops in West Coast USA but not always in others like Italy
-local function getIsTriggerForBusStop(triggerName)
-  if not triggerName then return false end
-
-  local obj = scenetree.findObject(triggerName)
-
-  if obj then
-    local ok, t = pcall(function() return obj.type end)
-    if ok and t == "busstop" then
-      return true
-    end
-  end
-
-  -- fallback to support community maps
-  local lower = triggerName:lower()
-  return triggerName:match("^tmpl_bs_") ~= nil
-      or lower:match("busstop") ~= nil
-      or lower:match("^bs_") ~= nil
-end
-
-local function getPlayerVehicleID()
-  local playerVehicle = be:getPlayerVehicle(0)
-  return playerVehicle and playerVehicle:getID() or nil
-end
-
--- fired whenever ANY object enters/exits ANY trigger
-M.onBeamNGTrigger = function(data)
-  if not data then return end
-  
-  local pid = getPlayerVehicleID()
-
-  if not pid or data.subjectID ~= pid then return end -- not our vehicle
-  if not getIsTriggerForBusStop(data.triggerName) then return end
-
-  if data.event == "enter" then
-    log("I", "onBeamNGTrigger", "enter bus stop '" .. data.triggerName .. "'")
-    currentStopTriggerName = data.triggerName
-    isAtBusStop = true
-  elseif data.event == "exit" and data.triggerName == currentStopTriggerName then
-    log("I", "onBeamNGTrigger", "leave bus stop '" .. data.triggerName .. "'")
-    currentStopTriggerName = nil
-    isAtBusStop = false
-  end
-end
 
 -- beamng has "managers" that manage the flow of state
 -- they are notified when the state changes eg. when you stop at a bus stop
@@ -108,21 +63,6 @@ local function attachToManagers()
   end
 end
 
--- M.onExtensionLoaded = function()
---   log("I", "onExtensionLoaded", "Extension loaded")
---   attachToManagers()
--- end
-
--- M.onScenarioLoaded = function(scenario)
---   log("I", "onScenarioLoaded", "Scenario '" .. scenario.name .. "' loaded")
---   attachToManagers()
--- end
-
--- M.onMissionScreenReady = function(mode) -- 'startScreen'
---   log("I", "onMissionScreenReady", "Ready!")
---   attachToManagers()
--- end
-
 local function cleanup()
   -- prevent any memory leaks by removing our references
   patchedMgr = nil
@@ -150,15 +90,6 @@ M.onAnyMissionChanged = function(status, mission, userSettings)
     end
   end
 end
-
--- M.onClientStartMission = function()
---   log("I", "onClientStartMission", "It is starting")
--- end
-
--- M.onClientPostStartMission = function()
---   log("I", "onClientPostStartMission", "Attaching to managers...")
---   attachToManagers()
--- end
 
 local function onFlowgraphStateStarted(mgr, name, state, transData)
   -- log("I", "onFlowgraphStateStarted", name)
